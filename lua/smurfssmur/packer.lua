@@ -8,9 +8,10 @@ return require('packer').startup(function(use)
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.1',
     -- or                            , branch = '0.1.x',
-    requires = { { 'nvim-lua/plenary.nvim' } }
+    requires = {
+      { 'nvim-lua/plenary.nvim' },
+      {'nvim-telescope/telescope-file-browser.nvim'} }
   }
-
   use 'folke/tokyonight.nvim' --Theme
 
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' }) -- Allows for colors and things
@@ -24,11 +25,6 @@ return require('packer').startup(function(use)
   use('windwp/nvim-ts-autotag')
   use('mrjones2014/nvim-ts-rainbow') -- rainbow brackets
 
-  use { 'nvim-telescope/telescope-file-browser.nvim', -- File Browser
-    requires = {
-      'nvim-tree/nvim-web-devicons', -- icons
-    }
-  }
 
   use { -- File Sidebar
     'nvim-tree/nvim-tree.lua',
