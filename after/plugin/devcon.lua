@@ -1,5 +1,9 @@
-local status, icons = pcall(require, "nvim-web-devicons")
-if (not status) then return end
+local status_ok, icons = pcall(require, "nvim-web-devicons")
+if vim.g.vscode then return end
+if (not status_ok) then
+  print("nvim-web-devicons not loaded")
+  return
+end
 
 
 icons.setup {

@@ -1,4 +1,11 @@
-require('lspkind').init({
+local status_ok, lspkind = pcall(require, "lspkind")
+if (vim.g.vscode) then return end
+if (not status_ok) then
+  print("lspkind not loaded")
+  return
+end
+
+lspkind.init({
   -- DEPRECATED (use mode instead): enables text annotations
   --
 

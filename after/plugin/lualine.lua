@@ -1,5 +1,9 @@
-local status, lualine = pcall(require, "lualine")
-if (not status) then return end
+local status_ok, lualine = pcall(require, "lualine")
+if (vim.g.vscode) then return end
+if (not status_ok) then
+  print("lualine not loaded")
+  return
+end
 
 
 lualine.setup {

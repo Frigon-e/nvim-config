@@ -3,10 +3,16 @@ vim.opt.signcolumn = 'yes'
 -- Learn the keybindings, see :help lsp-zero-keybindings
 -- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 
-local zero_lsp = require('lsp-zero')
+local status_ok, zero_lsp = pcall(require, "lsp-zero")
+local status2_ok, lspkind = pcall(require, "lspkind")
+if (vim.g.vscode) then return end
+if not status_ok or not status2_ok then
+  print("lsp-zero not loaded")
+  return
+end
+
 zero_lsp.preset('recommended')
 
-local lspkind = require('lspkind')
 
 zero_lsp.ensure_installed({
   'tsserver',
@@ -17,7 +23,15 @@ zero_lsp.ensure_installed({
   'tailwindcss',
 })
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+
+local status3_ok, capabilities = pcall(require, "cmp_nvim_lsp")
+if (not status3_ok) then
+  print("cmp_nvim_lsp not loaded")
+  return
+end
+capabilities = capabilities.default_capabilities()
+
 
 
 zero_lsp.configure('tsserver', {
@@ -37,8 +51,18 @@ zero_lsp.configure('sumneko_lua', {
   }
 })
 
+zero_lsp.configure('tailwindcss', {
+  filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+  cmd = { "tailwindcss-language-server", "--stdio" },
+  capabilities = capabilities
+})
+
 -- Sets the mapping for the LSP client
-local cmp = require('cmp')
+local status4_ok, cmp = pcall(require, "cmp")
+if (not status4_ok) then
+  print("cmp not loaded")
+  return
+end
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = zero_lsp.defaults.cmp_mappings({
   ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -57,6 +81,18 @@ cmp_mappings['<Enter>'] = nil
 zero_lsp.setup_nvim_cmp({
   -- This sets default mappings for nvim-cmp
   mapping = cmp_mappings,
+
+  sources = {
+    { name = 'luasnip' },
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'buffer' },
+    { name = 'path' },
+    { name = 'calc' },
+    { name = 'vsnip' },
+    { name = 'nvim_treesitter' },
+
+  },
   -- This sets the snippet look for nvim-cmp
   -- uses LspKind Icons
   formatting = {
@@ -93,7 +129,7 @@ zero_lsp.on_attach(function(_, bufnr)
   local opts = { buffer = bufnr, remap = false }
 
   vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-  vim.keymap.set("n", "<C-b>", function() vim.lsp.buf.hover() end, opts)
+  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
   vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
   vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
   vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
@@ -103,7 +139,6 @@ zero_lsp.on_attach(function(_, bufnr)
   vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
   vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references, opts)
-  require("tailwindcss-colors").buf_attach(bufnr)
 
 end)
 

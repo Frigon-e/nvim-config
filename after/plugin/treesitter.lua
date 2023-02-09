@@ -1,4 +1,13 @@
-require 'nvim-treesitter.configs'.setup {
+local status_ok, treeconfig = pcall(require, "nvim-treesitter.configs")
+if (vim.g.vscode) then return end
+if (not status_ok) then
+  print("nvim-treesitter.configs not loaded")
+  return
+end
+
+
+
+treeconfig.setup {
   -- A list of parser names, or "all" (the four listed parsers should always be installed)
   ensure_installed = { "c", "typescript", "javascript", "lua", "vim", "tsx", "fish", "yaml", "json", "help", "css" },
 
@@ -26,5 +35,14 @@ require 'nvim-treesitter.configs'.setup {
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
+  },
+  -- ...
+  rainbow = {
+    enable = true,
+    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+    -- colors = {}, -- table of hex strings
+    -- termcolors = {} -- table of colour name strings
   },
 }

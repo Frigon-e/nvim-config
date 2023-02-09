@@ -1,4 +1,11 @@
-require("tokyonight").setup({
+local status_ok, tokyonight = pcall(require, "tokyonight")
+if (vim.g.vscode) then return end
+if (not status_ok) then
+  print("tokyonight not loaded")
+  return
+end
+
+tokyonight.setup({
   -- your configuration comes here
   -- or leave it empty to use the default settings
   style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`

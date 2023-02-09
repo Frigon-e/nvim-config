@@ -1,8 +1,12 @@
--- empty setup using defaults
-require("nvim-tree").setup()
+local status_ok, nvimtree = pcall(require, "nvim-tree")
+if (vim.g.vscode) then return end
+if (not status_ok) then
+  print("nvim-tree not loaded")
+  return
+end
 
 -- OR setup with some options
-require("nvim-tree").setup({
+nvimtree.setup({
 
   sort_by = "case_sensitive",
   view = {
@@ -16,7 +20,7 @@ require("nvim-tree").setup({
     custom = {
       '^node_modules$',
       '^__pycache__$',
-      '.git$',
+      '^git$',
     }
   },
   git = {

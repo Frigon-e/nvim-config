@@ -1,5 +1,12 @@
+local status_ok, illuminate = pcall(require, "illuminate")
+if (vim.g.vscode) then return end
+if (not status_ok) then
+  print("illuminate not loaded")
+  return
+end
+
 -- default configuration
-require('illuminate').configure({
+illuminate.configure({
     -- providers: provider used to get references in the buffer, ordered by priority
     providers = {
         'lsp',

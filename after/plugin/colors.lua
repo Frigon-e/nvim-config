@@ -52,4 +52,6 @@ function TokyoNight()
 
 end
 
-ColorMyPencils()
+if not vim.g.vscode then
+  ColorMyPencils()
+end
